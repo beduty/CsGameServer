@@ -1,0 +1,28 @@
+﻿<Window x:Class="Practice.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Practice"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="831.333">
+    <Grid>
+        <Button x:Name="button" Content="ref Swap" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" BorderBrush="#FF712222" Foreground="#FF971C1C" Background="#FFF0DCDC" Click="button_Click" Height="35" RenderTransformOrigin="0.5,0.5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <ListBox x:Name="lstLog" HorizontalAlignment="Left" Height="379" Margin="490,31,0,0" VerticalAlignment="Top" Width="325"/>
+        <TextBlock x:Name="stLog" HorizontalAlignment="Left" Margin="490,10,0,0" TextWrapping="Wrap" Text="Log" VerticalAlignment="Top" RenderTransformOrigin="4.147,0.689"/>
+        <Button x:Name="btnOutDivide" Content="out Divide" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Width="150" BorderBrush="#FF712222" Foreground="#FF971C1C" Background="#FFF0DCDC" Click="button_Click_OutDivide" Height="35" RenderTransformOrigin="0.5,0.5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Button x:Name="btnClass" Content="class" HorizontalAlignment="Left" Margin="10,90,0,0" VerticalAlignment="Top" Width="150" Background="#FFF09494" Click="btnClass_Click" Height="35" RenderTransformOrigin="0.56,1.073" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Button x:Name="btnClassStruct" Content="얕은복사, 깊은복사" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnClassStruct_Click" RenderTransformOrigin="0.5,0.5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Button x:Name="btnClassClone" Content="Class Clone" HorizontalAlignment="Left" Margin="10,170,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnClassClone_Click" RenderTransformOrigin="0.516,-0.124" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Button x:Name="btnClassStatic" Content="Static Member" HorizontalAlignment="Left" Margin="10,210,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnClassStatic_Click" RenderTransformOrigin="0.5,0.5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Button x:Name="btnClassInherit" Content="클래스 상속" HorizontalAlignment="Left" Margin="10,250,0,0" VerticalAlignment="Top" Width="150" Click="btnClassInherit_Click" Height="35" RenderTransformOrigin="0.444,1.153" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Button x:Name="btnClassTypeConversion" Content="클래스 형식변환" HorizontalAlignment="Left" Margin="10,290,0,0" VerticalAlignment="Top" Width="150" RenderTransformOrigin="0.112,-0.479" Height="35" Click="btnClassTypeConversion_Click"/>
+        <Button x:Name="btnDictionary" Content="Dictionary" HorizontalAlignment="Left" Margin="10,330,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnDictionary_Click" RenderTransformOrigin="0.462,1.229"/>
+        <Button x:Name="btnGeneric" Content="Generic" HorizontalAlignment="Left" Margin="165,10,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnGeneric_Click"/>
+        <Button x:Name="btnInterface" Content="인터페이스" HorizontalAlignment="Left" Margin="165,50,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnInterface_Click"/>
+        <Button x:Name="btnProperty" Content="Property" HorizontalAlignment="Left" Margin="165,90,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnProperty_Click"/>
+        <Button x:Name="button1" Content="Button" HorizontalAlignment="Left" Margin="320,10,0,0" VerticalAlignment="Top" Width="150" Height="35"/>
+        <Button x:Name="btnDelegate" Content="Delegate(대리자)" HorizontalAlignment="Left" Margin="165,130,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnDelegate_Click"/>
+
+    </Grid>
+</Window>

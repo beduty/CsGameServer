@@ -9,13 +9,15 @@ namespace ServerCore
     class Listener
     {
         Socket _listenSocket;
-        
+        Action<Socket> _onAcceptHandler;
 
-        public void Init(IPEndPoint endPoint)
+        public void Init(IPEndPoint endPoint, Action<Socket> onAcceptHandler)
         {
             _listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             _listenSocket.Bind(endPoint);
             _listenSocket.Listen(10);
+
+            _onAcceptHandler += onAcceptHandler;
 
             SocketAsyncEventArgs args = new SocketAsyncEventArgs();
             args.Completed += new EventHandler<SocketAsyncEventArgs>(OnAcceptCompleted);
@@ -24,6 +26,11 @@ namespace ServerCore
 
         void RegisterAccept(SocketAsyncEventArgs args)
         {
+            if (args.AcceptSocket != null)
+            {
+                args.AcceptSocket = null;
+            }
+
             // 당장 완료되지 않음.
             bool pending = _listenSocket.AcceptAsync(args);
             if (pending == false)
@@ -36,7 +43,7 @@ namespace ServerCore
         {
             if(args.SocketError == SocketError.Success)
             {
-                // Todo
+                _onAcceptHandler.Invoke(args.AcceptSocket);
             }
             else
             {
@@ -45,13 +52,5 @@ namespace ServerCore
             RegisterAccept(args);
         }
 
-        public Socket Accept()
-        {
-            // blocking 
-            // _listenSocket.Accept();
-
-
-            return
-        }
     }
 }

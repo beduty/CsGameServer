@@ -8,6 +8,22 @@ namespace ServerCore
     class Program
     {
         static Listener _listener =  new Listener();
+        static void OnAcceptHandler(Socket clientSocket)
+        {
+            // receive
+            byte[] recvBuff = new byte[1024];
+            int recvBytes = clientSocket.Receive(recvBuff);
+            string recvData = Encoding.UTF8.GetString(recvBuff, 0, recvBytes);
+            Console.WriteLine($"[From Client] {recvData}");
+
+            // send
+            byte[] sendBuff = Encoding.UTF8.GetBytes("Welcom to MMORPG Server !");
+            clientSocket.Send(sendBuff);
+
+            // close
+            clientSocket.Shutdown(SocketShutdown.Both);
+            clientSocket.Close();
+        }
 
         static void Main(string[] args)
         {
@@ -16,28 +32,14 @@ namespace ServerCore
             IPAddress iPAddress = ipHost.AddressList[0];
             IPEndPoint endPoint = new IPEndPoint(iPAddress, 7777);
 
-            _listener.Init(endPoint);
+            _listener.Init(endPoint, OnAcceptHandler);
 
             while (true)
             {
-                Console.WriteLine("Listening...");
+                //Console.WriteLine("Listening...");
 
-                // accept 
-                Socket clientSocket = _listener.Accept();
-
-                // receive
-                byte[] recvBuff = new byte[1024];
-                int recvBytes = clientSocket.Receive(recvBuff);
-                string recvData = Encoding.UTF8.GetString(recvBuff, 0, recvBytes);
-                Console.WriteLine($"[From Client] {recvData}");
-
-                // send
-                byte[] sendBuff = Encoding.UTF8.GetBytes("Welcom to MMORPG Server !");
-                clientSocket.Send(sendBuff);
-                
-                // close
-                clientSocket.Shutdown(SocketShutdown.Both);
-                clientSocket.Close();
+                //// accept 
+                //Socket clientSocket = _listener.Accept();
             }
         }
     }
