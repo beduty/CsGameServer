@@ -21,8 +21,19 @@
         <Button x:Name="btnGeneric" Content="Generic" HorizontalAlignment="Left" Margin="165,10,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnGeneric_Click"/>
         <Button x:Name="btnInterface" Content="인터페이스" HorizontalAlignment="Left" Margin="165,50,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnInterface_Click"/>
         <Button x:Name="btnProperty" Content="Property" HorizontalAlignment="Left" Margin="165,90,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnProperty_Click"/>
-        <Button x:Name="button1" Content="Button" HorizontalAlignment="Left" Margin="320,10,0,0" VerticalAlignment="Top" Width="150" Height="35"/>
         <Button x:Name="btnDelegate" Content="Delegate(대리자)" HorizontalAlignment="Left" Margin="165,130,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnDelegate_Click"/>
+        <Button x:Name="btnEvent" Content="Event" HorizontalAlignment="Left" Margin="165,170,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnEvent_Click"/>
+        <Button x:Name="btnRambda" Content="Lambda" HorizontalAlignment="Left" Margin="165,210,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnRambda_Click"/>
+        <Button x:Name="btnThread" Content="Thread" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Margin="165,250,0,0" Height="35" Click="btnThread_Click"/>
+        <Button x:Name="btnThreadPool" Content="Thread Pool" HorizontalAlignment="Left" Margin="165,290,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnThreadPool_Click"/>
+        <Button x:Name="btnTask" Content="Task" HorizontalAlignment="Left" Margin="165,330,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnTask_Click"/>
+        <Button x:Name="btnInterLock" Content="Interlocked" HorizontalAlignment="Left" Margin="320,10,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnInterLock_Click"/>
+        <Button x:Name="btnSpinLock" Content="SpinLock" HorizontalAlignment="Left" Margin="320,50,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnSpinLock_Click"/>
+        <Button x:Name="btnEvent1" Content="이벤트 동기화" HorizontalAlignment="Left" Margin="320,90,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnEvent1_Click"/>
+        <Button x:Name="btnMutex" Content="MutexLock(수동)" HorizontalAlignment="Left" Margin="320,130,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnMutex_Click"/>
+        <Button x:Name="btnCsSpnLock" Content="C# SpinLock" HorizontalAlignment="Left" Margin="320,170,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnCsSpnLock_Click"/>
+        <Button x:Name="btnReadWriteLock" Content="ReadWrite Lock" HorizontalAlignment="Left" Margin="320,210,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnReadWriteLock_Click"/>
+        <Button x:Name="btnTLS" Content="Thread Local Storage" HorizontalAlignment="Left" Margin="320,250,0,0" VerticalAlignment="Top" Width="150" Height="35" Click="btnTLS_Click"/>
 
     </Grid>
 </Window>

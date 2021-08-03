@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
+using System.Threading;
 
 namespace Practice
 {
@@ -23,7 +25,7 @@ namespace Practice
             InitializeComponent();
         }
 
-        void Swap(ref int a , ref int b)
+        void Swap(ref int a, ref int b)
         {
             int tmp = a;
             a = b;
@@ -48,7 +50,7 @@ namespace Practice
 
         private void button_Click_OutDivide(object sender, RoutedEventArgs e)
         {
-            int num1 = 10, num2 = 3 ;
+            int num1 = 10, num2 = 3;
             int ret1, ret2;
             Divide(num1, num2, out ret1, out ret2);
 
@@ -75,7 +77,7 @@ namespace Practice
             Knight knight = new Knight();
             knight.hp = 200;
             knight.attack = 10;
-            
+
             string strRet;
             knight.Attack(out strRet);
             lstLog.Items.Add(strRet);
@@ -152,7 +154,7 @@ namespace Practice
             Thief thief1 = new Thief();
             thief1.hp = 100;
             thief1.attack = 10;
-            strRet = $"thief1 HP : {thief1.hp}";   lstLog.Items.Add(strRet);
+            strRet = $"thief1 HP : {thief1.hp}"; lstLog.Items.Add(strRet);
 
             Thief thief2 = new Thief();
             thief2.hp = thief1.hp;
@@ -293,7 +295,8 @@ namespace Practice
                 strLog = $"monster ID 5000 find fail";
                 lstLog.Items.Add(strLog);
             }
-            else{
+            else
+            {
                 strLog = $"monster ID : {mon.id}";
                 lstLog.Items.Add(strLog);
             }
@@ -396,7 +399,7 @@ namespace Practice
         private void btnInterface_Click(object sender, RoutedEventArgs e)
         {
             FlyableOrc flyOrc = new FlyableOrc();
-            lstLog.Items.Add( DoFly(flyOrc));
+            lstLog.Items.Add(DoFly(flyOrc));
         }
 
 
@@ -408,8 +411,8 @@ namespace Practice
                 get { return hp; }
                 set
                 {
-                    if(value >= 0)
-                        hp = value; 
+                    if (value >= 0)
+                        hp = value;
                 }
             }
         }
@@ -420,8 +423,8 @@ namespace Practice
             string strLog;
 
             Medic medic = new Medic();
-            medic.Hp = 100;            
-            strLog = $"Medic Hp : {medic.Hp}";  lstLog.Items.Add(strLog);
+            medic.Hp = 100;
+            strLog = $"Medic Hp : {medic.Hp}"; lstLog.Items.Add(strLog);
 
             medic.Hp = -20;
             strLog = $"Medic Hp : {medic.Hp}"; lstLog.Items.Add(strLog);
@@ -430,7 +433,7 @@ namespace Practice
         // Delegate는 형식!
         // 반환형 int, 인자 void 의 형태를 가지는 함수를
         // OnClicked라는 형식으로 치환하여 부른다.
-        delegate int OnClicked(); 
+        delegate int OnClicked();
 
         void ButtonPressd(OnClicked clickedFunc)
         {
@@ -459,5 +462,460 @@ namespace Practice
             clicked += TestDelegate2;
             ButtonPressd(clicked);
         }
-    }
+
+        InputManager manager = new InputManager();
+        void OnInputTest()
+        {
+            lstLog.Items.Add("Input Received");
+        }
+
+
+        private void btnEvent_Click(object sender, RoutedEventArgs e)
+        {
+            manager.InputKey += OnInputTest;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            while (true)
+            {
+                if (sw.ElapsedMilliseconds > 3 * 1000)
+                {
+                    break;
+                }
+                manager.Update();
+            }
+            sw.Stop();
+        }
+
+        enum ItemType
+        {
+            Weapon,
+            Armor,
+            Amulet,
+            Ring
+        }
+        enum Rarity
+        {
+            Normal,
+            Uncommon,
+            Rare,
+        }
+
+        class Item
+        {
+            public ItemType ItemType;
+            public Rarity Rarity;
+        }
+
+        List<Item> _items = new List<Item>();
+
+        Item FindWeapon()
+        {
+            foreach (Item item in _items)
+            {
+                if (item.ItemType == ItemType.Weapon)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+
+        Item FindArmor()
+        {
+            foreach (Item item in _items)
+            {
+                if (item.ItemType == ItemType.Armor)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+
+        // Delegate를 활용해보자. (함수를 넘긴다.)
+        delegate bool ItemSelector(Item item); // 판별하야 true, false를 리턴해준다.
+        Item FindItem(ItemSelector selector)
+        {
+            foreach (Item item in _items)
+            {
+                if (selector(item))
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+        bool IsWeapon(Item item)
+        {
+            return (item.ItemType == ItemType.Weapon);
+        }
+
+        private void btnRambda_Click(object sender, RoutedEventArgs e)
+        {
+            _items.Add(new Item() { ItemType = ItemType.Weapon, Rarity = Rarity.Normal });
+            _items.Add(new Item() { ItemType = ItemType.Amulet, Rarity = Rarity.Uncommon });
+            _items.Add(new Item() { ItemType = ItemType.Ring, Rarity = Rarity.Rare });
+
+            Item find1 = FindItem(IsWeapon);
+
+            // 람다로 쓸 수 있다. 
+            Item find2 = FindItem(delegate (Item item) { return item.ItemType == ItemType.Armor; });
+            Item find3 = FindItem((Item item) => { return item.ItemType == ItemType.Ring; });
+        }
+
+
+        void ThreaProc()
+        {
+            System.Diagnostics.Debug.WriteLine("Hello Thread");
+        }
+
+        private void btnThread_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Run Thread~");
+            Thread t = new Thread(ThreaProc);
+            t.Name = "TestThread"; // 스레드에 이름을 붙일 수도 있다.
+            // t.IsBackground = true; // 메인이 종료되면 backgroud thread도 종료된다.
+            t.Start();
+            t.Join();
+        }
+
+        void ThreadPoolProc(object obj)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                System.Diagnostics.Debug.WriteLine($"Hello Thread {i}");
+            }
+        }
+
+        private void btnThreadPool_Click(object sender, RoutedEventArgs e)
+        {
+            ThreadPool.SetMinThreads(1, 1);
+            ThreadPool.SetMaxThreads(5, 5); // ThreadPool에 동시에 일할수 있는 작업은 5개까지! 그 다음은 작업이 완료될 때까지 대기!
+
+            for (int i = 0; i < 4; i++)
+            {
+                ThreadPool.QueueUserWorkItem((obj) => { while (true) { } });
+            }
+            ThreadPool.QueueUserWorkItem(ThreadPoolProc); // 한자리 남았으므로 실행된다.
+
+            while (true)
+            {
+
+            }
+        }
+        private void btnTask_Click(object sender, RoutedEventArgs e)
+        {
+
+            ThreadPool.SetMinThreads(1, 1);
+            ThreadPool.SetMaxThreads(5, 5); // ThreadPool에 동시에 일할수 있는 작업은 5개까지! 그 다음은 작업이 완료될 때까지 대기!
+
+            for (int i = 0; i < 5; i++)
+            {
+                //Task t = new Task(() => { while (true) { } });
+                Task t = new Task(() => { while (true) { } }, TaskCreationOptions.LongRunning); // Max Threads 개수와는 상관 없이 돌아간다.
+            }
+            ThreadPool.QueueUserWorkItem(ThreadPoolProc); // Task에서 모든 자리 차지 하고 있으므로, 실행 X 
+            // But, Task t = new Task(() => { while (true) { } }, TaskCreationOptions.LongRunning); 이었으면 실행 O
+
+            while (true)
+            {
+
+            }
+        }
+
+        int num = 0;
+        object _obj = new object();
+
+        void Thread_1()
+        {
+            for (int i = 0; i < 100000; i++)
+            {
+                //num++;
+                //Interlocked.Increment(ref num);
+
+                lock (_obj)
+                {
+                    num++;
+                }
+            }
+        }
+
+        void Thread_2()
+        {
+            for (int i = 0; i < 100000; i++)
+            {
+                //num--;
+                //Interlocked.Decrement(ref num);
+
+                lock (_obj)
+                {
+                    num--;
+                }
+            }
+        }
+        private void btnInterLock_Click(object sender, RoutedEventArgs e)
+        {
+            Task t1 = new Task(Thread_1);
+            Task t2 = new Task(Thread_2);
+            t1.Start();
+            t2.Start();
+            Task.WaitAll(t1, t2);
+            int a = num;
+        }
+
+
+        class MySpinLock
+        {
+            volatile int _locked = 0;
+
+            public void Acquire()
+            {
+                while (true)
+                {
+                    // 원자성이 보장되지 않는다. ==> Thread-Safe하지 않다.
+                    //if (_locked == 0)
+                    //{
+                    //    _locked = 1;
+                    //}
+
+                    // 내부는 다음과 같이 구현된다.
+                    // int old = *_locked;
+                    // if(*_locked == expected)
+                    //    *locked = desired;
+                    // return old;
+                    int expected = 0;
+                    int desired = 1;
+                    int original = Interlocked.CompareExchange(ref _locked, desired, expected);
+                    if (original == 0)
+                    {
+                        // 이미 1로 바뀌어 있지는 않았는지 확인이 가능하다!
+                        break;
+                    }
+
+                    //Thread.Sleep(1);// 무조건 휴식 
+                    //Thread.Sleep(0);// 조건부 휴식 => 우선순위 같거나 높은 애한테는 양보, 낮은애들은 양보 불가.
+                    Thread.Yield(); // 지금 실행 가능한 스레드 있으면 실행 양 ==> 없으면 양보 X
+                }
+            }
+
+            public void Release()
+            {
+                _locked = 0;
+            }
+        }
+
+        int number = 0;
+        MySpinLock _lock = new MySpinLock();
+
+        void ThrSpinLock_1()
+        {
+            for (int i = 0; i < 100000; i++)
+            {
+                _lock.Acquire();
+                number++;
+                _lock.Release();
+            }
+        }
+        void ThrSpinLock_2()
+        {
+            for (int i = 0; i < 100000; i++)
+            {
+                _lock.Acquire();
+                number--;
+                _lock.Release();
+            }
+        }
+
+        private void btnSpinLock_Click(object sender, RoutedEventArgs e)
+        {
+            Task t1 = new Task(ThrSpinLock_1);
+            Task t2 = new Task(ThrSpinLock_2);
+            t1.Start();
+            t2.Start();
+            Task.WaitAll(t1, t2);
+            int a = number;
+        }
+
+
+        class AutoLock
+        {
+            AutoResetEvent _avaliable = new AutoResetEvent(true); // true 누구나 들어올 수 있음. (첫번쨰 입장만)
+            public void Acquire()
+            {
+                _avaliable.WaitOne();// 입장 시도. => 누군가 획득하면 문이 닫힘.다른 사람은 못들어옴.
+            }
+            public void Release()
+            {
+                _avaliable.Set(); // 다시 문을 열어둠.
+            }
+        }
+
+
+        int numberAuto = 0;
+        AutoLock _lockAuto = new AutoLock();
+
+        void ThrAutoLock_1()
+        {
+            for (int i = 0; i < 100000; i++)
+            {
+                _lockAuto.Acquire();
+                numberAuto++;
+                _lockAuto.Release();
+            }
+        }
+        void ThrAutoLock_2()
+        {
+            for (int i = 0; i < 100000; i++)
+            {
+                _lockAuto.Acquire();
+                numberAuto--;
+                _lockAuto.Release();
+            }
+        }
+
+        private void btnEvent1_Click(object sender, RoutedEventArgs e)
+        {
+            Task t1 = new Task(ThrAutoLock_1);
+            Task t2 = new Task(ThrAutoLock_2);
+            t1.Start();
+            t2.Start();
+            Task.WaitAll(t1, t2);
+            int a = numberAuto;
+        }
+
+
+        int numberManual = 0;
+        //ManualLock _lockManual = new ManualLock();
+        Mutex _lockManual = new Mutex();
+        void ThrManualLock_1()
+        {
+            for (int i = 0; i < 100000; i++)
+            {
+                _lockManual.WaitOne();
+                numberManual++;
+                _lockManual.ReleaseMutex();
+            }
+        }
+        void ThrManualLock_2()
+        {
+            for (int i = 0; i < 100000; i++)
+            {
+                _lockManual.WaitOne();
+                numberManual--;
+                _lockManual.ReleaseMutex();
+            }
+        }
+
+        private void btnMutex_Click(object sender, RoutedEventArgs e)
+        {
+            Task t1 = new Task(ThrManualLock_1);
+            Task t2 = new Task(ThrManualLock_2);
+            t1.Start();
+            t2.Start();
+            Task.WaitAll(t1, t2);
+            int a = numberManual;
+        }
+
+
+        int nTstNum = 0;
+        SpinLock _lock2 = new SpinLock();
+
+        void SpinThread_1()
+        {
+            bool lockTaken = false;
+            for (int i = 0; i < 100000; i++)
+            {
+                lockTaken = false;
+                try
+                {
+                    _lock2.Enter(ref lockTaken);
+                    nTstNum++;
+                }
+                finally
+                {
+                    if (lockTaken)
+                    {
+                        _lock2.Exit();
+                    }
+                }
+            }
+        }
+
+        void SpinThread_2()
+        {
+            bool lockTaken = false;
+            for (int i = 0; i < 100000; i++)
+            {
+                try
+                {
+                    lockTaken = false;
+                    _lock2.Enter(ref lockTaken);
+                    nTstNum--;
+                }
+                finally
+                {
+                    if (lockTaken)
+                    {
+                        _lock2.Exit();
+                    }                    
+                }
+            }
+        }
+
+        private void btnCsSpnLock_Click(object sender, RoutedEventArgs e)
+        {
+            Task t1 = new Task(SpinThread_1);
+            Task t2 = new Task(SpinThread_2);
+            t1.Start();
+            t2.Start();
+            Task.WaitAll(t1, t2);
+        }
+
+
+        class Reward
+        {
+
+        }
+
+        ReaderWriterLockSlim _lock3 = new ReaderWriterLockSlim();
+        Reward GetRewardByID(int id)
+        {
+            _lock3.EnterReadLock();
+            // get..
+            _lock3.ExitReadLock();
+            return null;
+        }
+        void AddReward(Reward reward)
+        {
+            _lock3.EnterReadLock();
+            // set..
+            _lock3.ExitReadLock();            
+        }
+
+
+        private void btnReadWriteLock_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        ThreadLocal<string> ThreadName = new ThreadLocal<string>();
+        // 스레드에서 TreadName에 접근하면, 자신만의 공간으로 저장해서 사용한다.
+        // 특정 스레드가 ThreadName을 변경해도 다른 스레드에 영향을 받지 않는다.
+        
+        void WhoAmI()
+        {
+            // 스레드의 영역에서만 변경된 값이 적용된다.
+            ThreadName.Value = $"My Name is {Thread.CurrentThread.ManagedThreadId}";
+            //Thread.Sleep(1000);
+            System.Diagnostics.Debug.WriteLine(ThreadName.Value);
+        }
+       
+        private void btnTLS_Click(object sender, RoutedEventArgs e)
+        {
+            ThreadPool.SetMinThreads(1, 1);
+            ThreadPool.SetMaxThreads(3, 3);
+            Parallel.Invoke(WhoAmI, WhoAmI, WhoAmI, WhoAmI, WhoAmI, WhoAmI);
+            ThreadName.Dispose();
+        }
+    }    
 }
